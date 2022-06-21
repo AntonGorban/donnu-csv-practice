@@ -1,8 +1,8 @@
 {
-  "name": "angular-cli-electron",
-  "productName": "Angular CLI + Electron",
+  "name": "donnu-csv-practice",
+  "productName": "DonNU CSV Practice",
   "version": "1.0.0",
-  "description": "Angular CLI + Electron",
+  "description": "DonNU CSV Practice",
   "main": "electron.prod.js",
   "license": "MIT"
 }
