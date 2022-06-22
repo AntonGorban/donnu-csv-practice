@@ -36,11 +36,27 @@ export class AppComponent {
     }
   }
 
+  protected fileName: null | string = null;
+  protected dirName: null | string = null;
+  protected pathToFile: null | string = null;
+  protected data: null | string = null;
+
   protected readCsv() {
-    if (this._electronService.isElectronApp) {
+    if (
+      !!this?._electronService?.isElectronApp &&
+      !!this?._electronService?.ipcRenderer
+    ) {
       const response =
         this._electronService.ipcRenderer.sendSync('read-csv-file');
-      console.log(response);
+
+      if (response instanceof Error) throw new Error(response.message);
+
+      this.fileName = response.fileName;
+      this.dirName = response.dirName;
+      this.pathToFile = response.pathToFile;
+      this.data = response.data;
+    } else {
+      throw new Error('Невозможно выполнение данной функции');
     }
   }
 

@@ -47,3 +47,13 @@ section {
     }
   }
 }
+
+#utils {
+  width: 100%;
+
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+}

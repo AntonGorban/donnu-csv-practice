@@ -7,6 +7,8 @@
 /bazel-out
 /packages
 /src/ipc.js
+/src/electron.dev.js
+/src/electron.prod.js
 
 # Node
 /node_modules

@@ -63,7 +63,15 @@
     </table>
   </div>
 
-  <div id="ulils">
+  <div id="utils">
+    <div>
+      <button (click)="readCsv()">Прочитать из файла</button>
+
+      <em *ngIf="pathToFile">{{ pathToFile }}</em>
+
+      <button *ngIf="pathToFile">Записать в файл</button>
+    </div>
+
     <button (click)="setDefaultData()">Generate default stats</button>
 
     <button (click)="createStatItem()">Добавить</button>
@@ -71,8 +79,6 @@
     <button (click)="testIPC()">test</button>
 
     <button (click)="testDir()">test</button>
-
-    <button (click)="readCsv()">readCsv</button>
 
     <!-- <input type="file" (click)="testDir()" /> -->
   </div>
