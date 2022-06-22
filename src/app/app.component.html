@@ -1,1 +1,37 @@
-<h1>Hello to Angular</h1>
+<section>
+  <div id="title">
+    <h1>Hello to Angular</h1>
+  </div>
+
+  <div id="content">
+    <table border="1">
+      <thead>
+        <tr>
+          <th>№</th>
+          <th>Регион</th>
+          <th>Страна</th>
+          <th>Сталь</th>
+          <th>Уголь</th>
+          <th>Нефть</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let statsItem of stats.stats; let idx = index">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ statsItem.country.region }}</td>
+          <td>{{ statsItem.country.country }}</td>
+          <td>{{ statsItem.products.steel }}</td>
+          <td>{{ statsItem.products.coal }}</td>
+          <td>{{ statsItem.products.oil }}</td>
+          <td class="center"><button class="danger">Удалить</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="ulils">
+    <button (click)="setDefaultData()">Generate default stats</button>
+  </div>
+</section>

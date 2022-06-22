@@ -9,9 +9,26 @@
   --dark-black: #2d2d2d;
   --black: #3d3d3d;
   --white: #fefefe;
+  --red: #e22e22;
 }
 
 body {
-  background: var(--dark-black);
+  background-color: var(--dark-black);
+  color: var(--white);
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+button {
+  border: none;
+  padding: 5px;
+  border-radius: 3px;
+  background-color: var(--white);
+  color: var(--black);
+}
+
+button.danger {
+  background-color: var(--red);
   color: var(--white);
 }
