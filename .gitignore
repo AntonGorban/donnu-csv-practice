@@ -6,6 +6,7 @@
 /out-tsc
 /bazel-out
 /packages
+/src/ipc.js
 
 # Node
 /node_modules

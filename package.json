@@ -24,6 +24,8 @@
     "@angular/platform-browser": "^14.0.0",
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
+    "fs-extra": "^10.1.0",
+    "ngx-electron": "^2.2.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -32,6 +34,7 @@
     "@angular-devkit/build-angular": "^14.0.2",
     "@angular/cli": "~14.0.2",
     "@angular/compiler-cli": "^14.0.0",
+    "@types/fs-extra": "^9.0.13",
     "concurrently": "^7.2.2",
     "cross-var": "^1.1.0",
     "electron": "^19.0.5",

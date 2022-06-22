@@ -27,7 +27,8 @@
               "src/favicon.ico",
               "src/assets",
               "src/package.json",
-              "src/electron.prod.js"
+              "src/electron.prod.js",
+              "src/ipc.js"
             ],
             "styles": ["src/styles.scss"],
             "scripts": []

@@ -1,3 +1,5 @@
+import { ElectronService } from 'ngx-electron';
+
 import { Component } from '@angular/core';
 
 import { StatList } from '../Classes/Domain/StatList';
@@ -14,6 +16,33 @@ import {
 })
 export class AppComponent {
   protected stats: StatList = new StatList(getClearData());
+
+  constructor(private readonly _electronService: ElectronService) {}
+
+  protected testIPC() {
+    console.log(this._electronService);
+    if (this._electronService.isElectronApp) {
+      const response =
+        this._electronService.ipcRenderer.sendSync('getSomething');
+      console.log(response); // prints 'something'
+    }
+  }
+
+  protected testDir() {
+    if (this._electronService.isElectronApp) {
+      const response =
+        this._electronService.ipcRenderer.sendSync('select-dirs');
+      console.log(response); // prints 'something'
+    }
+  }
+
+  protected readCsv() {
+    if (this._electronService.isElectronApp) {
+      const response =
+        this._electronService.ipcRenderer.sendSync('read-csv-file');
+      console.log(response);
+    }
+  }
 
   protected readonly setDefaultData = () => {
     this.stats.setStats(getDefaultData());
