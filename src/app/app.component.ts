@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 
 import { StatList } from '../Classes/Domain/StatList';
-import { getClearData, getDefaultData } from '../other/defaultDomain';
+import {
+  getClearData,
+  getClearDataItem,
+  getDefaultData,
+} from '../other/defaultDomain';
 
 @Component({
   selector: 'app-root',
@@ -13,5 +17,37 @@ export class AppComponent {
 
   protected readonly setDefaultData = () => {
     this.stats.setStats(getDefaultData());
+  };
+
+  protected setRegion = (event: Event, idx: number) => {
+    this.stats.stats[idx].country.region = this.getValue(event);
+  };
+
+  protected setCountry = (event: Event, idx: number) => {
+    this.stats.stats[idx].country.country = this.getValue(event);
+  };
+
+  protected setSteel = (event: Event, idx: number) => {
+    this.stats.stats[idx].products.steel = Number(this.getValue(event));
+  };
+
+  protected setCoal = (event: Event, idx: number) => {
+    this.stats.stats[idx].products.coal = Number(this.getValue(event));
+  };
+
+  protected setOil = (event: Event, idx: number) => {
+    this.stats.stats[idx].products.oil = Number(this.getValue(event));
+  };
+
+  private getValue(event: Event): string {
+    return (event.target as HTMLInputElement).value;
+  }
+
+  protected deleteStatItem = (idx: number) => {
+    this.stats.delete(idx);
+  };
+
+  protected createStatItem = () => {
+    this.stats.push(getClearDataItem());
   };
 }

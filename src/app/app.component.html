@@ -20,12 +20,44 @@
       <tbody>
         <tr *ngFor="let statsItem of stats.stats; let idx = index">
           <td>{{ idx + 1 }}</td>
-          <td>{{ statsItem.country.region }}</td>
-          <td>{{ statsItem.country.country }}</td>
-          <td>{{ statsItem.products.steel }}</td>
-          <td>{{ statsItem.products.coal }}</td>
-          <td>{{ statsItem.products.oil }}</td>
-          <td class="center"><button class="danger">Удалить</button></td>
+          <td>
+            <input
+              [value]="statsItem.country.region"
+              (input)="setRegion($event, idx)"
+            />
+          </td>
+          <td>
+            <input
+              [value]="statsItem.country.country"
+              (input)="setCountry($event, idx)"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              [value]="statsItem.products.steel"
+              (input)="setSteel($event, idx)"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              [value]="statsItem.products.coal"
+              (input)="setCoal($event, idx)"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              [value]="statsItem.products.oil"
+              (input)="setOil($event, idx)"
+            />
+          </td>
+          <td class="center">
+            <button class="danger" (click)="deleteStatItem(idx)">
+              Удалить
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -33,5 +65,7 @@
 
   <div id="ulils">
     <button (click)="setDefaultData()">Generate default stats</button>
+
+    <button (click)="createStatItem()">Добавить</button>
   </div>
 </section>

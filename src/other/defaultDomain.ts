@@ -2,18 +2,20 @@ import { Country } from '../Classes/Domain/Country';
 import { Products } from '../Classes/Domain/Products';
 import { StatItem } from '../Classes/Domain/StatItem';
 
-const generateData = (data: Data): Array<StatItem> =>
-  data.map(
-    (statItem) =>
-      new StatItem(
-        new Country(statItem.region, statItem.country),
-        new Products(statItem.steel, statItem.coal, statItem.oil)
-      )
+const generateDataItem = (dataItem: Data[0]): StatItem =>
+  new StatItem(
+    new Country(dataItem.region, dataItem.country),
+    new Products(dataItem.steel, dataItem.coal, dataItem.oil)
   );
+
+const generateData = (data: Data): Array<StatItem> =>
+  data.map((statItem) => generateDataItem(statItem));
 
 export const getDefaultData = () => generateData(data);
 
 export const getClearData = () => generateData(clearData);
+
+export const getClearDataItem = () => generateDataItem(clearData[0]);
 
 type Data = ReadonlyArray<{
   region: string;
