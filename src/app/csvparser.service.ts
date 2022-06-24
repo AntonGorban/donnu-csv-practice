@@ -2,6 +2,7 @@ import * as papaparse from 'papaparse';
 
 import { Injectable } from '@angular/core';
 
+import { ExceptionError } from '../Classes/Error/ExceptionError';
 import { CSVDataType } from '../types/domain';
 
 @Injectable({
@@ -12,7 +13,7 @@ export class CSVParserService {
     const data = papaparse.parse(str).data;
 
     if (!data.every((dataItem) => Array.isArray(dataItem)))
-      throw new Error('не валидный CSV');
+      throw new ExceptionError('не валидный CSV');
 
     if ((data as Array<Array<unknown>>)[data.length - 1].length <= 1)
       data.pop();

@@ -1,6 +1,10 @@
 {
   "name": "donnu-csv-practice",
   "version": "0.0.0",
+  "author": {
+    "name": "Anton Gorban",
+    "email": "antogor.work@gmail.com"
+  },
   "scripts": {
     "electron": "electron ./src/electron.dev",
     "ng": "ng",
@@ -9,10 +13,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "package:win": "npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=win32 --arch=all --overwrite ",
-    "package:linux": "npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=linux --arch=all --overwrite ",
-    "package:osx": "npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=darwin --arch=all --overwrite ",
-    "package:all": "npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --all --arch=all --overwrite "
+    "package:win": "tsc --project tsconfig.electron.json && npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=win32 --arch=all --overwrite ",
+    "package:linux": "tsc --project tsconfig.electron.json && npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=linux --arch=all --overwrite ",
+    "package:osx": "tsc --project tsconfig.electron.json && npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=darwin --arch=all --overwrite ",
+    "package:all": "tsc --project tsconfig.electron.json && npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --all --arch=all --overwrite "
   },
   "private": true,
   "dependencies": {

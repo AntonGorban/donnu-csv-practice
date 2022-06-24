@@ -3,6 +3,7 @@ import { ElectronService } from 'ngx-electron';
 import { Component } from '@angular/core';
 
 import { StatList } from '../Classes/Domain/StatList';
+import { ExceptionError } from '../Classes/Error/ExceptionError';
 import { ValidationError } from '../Classes/Error/ValidationError';
 import { Validator } from '../Classes/Validation/Validator';
 import { csvDataVS } from '../other/validation/csvDataVS';
@@ -48,15 +49,15 @@ export class AppComponent {
     );
   };
 
-  protected readCsv() {
+  protected readonly readCsv = () => {
     try {
       if (!this._electronIsAvailable())
-        throw new Error('Невозможно выполнение данной функции');
+        throw new ExceptionError('Невозможно выполнение данной функции');
 
       const response =
         this._electronService.ipcRenderer.sendSync('read-csv-file');
 
-      if (response instanceof Error) throw new Error(response.message);
+      if (response instanceof Error) throw new ExceptionError(response.message);
 
       this._electronService.ipcRenderer.sendSync('show-message', {
         title: 'Чтение CSV файла',
@@ -80,12 +81,12 @@ export class AppComponent {
     } catch (error) {
       this._catchErrorHandler(error);
     }
-  }
+  };
 
   protected readonly writeCsv = () => {
     try {
       if (!this._electronIsAvailable())
-        throw new Error('Невозможно выполнение данной функции');
+        throw new ExceptionError('Невозможно выполнение данной функции');
 
       const data = this._csvParserService.toCsv(
         this._statsManagerService.generateCSVData(this.stats.stats)
@@ -96,7 +97,7 @@ export class AppComponent {
         { path: this.dirName, filename: this.fileName, data }
       );
 
-      if (response instanceof Error) throw new Error(response.message);
+      if (response instanceof Error) throw new ExceptionError(response.message);
 
       this._electronService.ipcRenderer.sendSync('show-message', {
         title: 'Запись CSV файла',
@@ -110,7 +111,7 @@ export class AppComponent {
   protected readonly savePreparedCsv = () => {
     try {
       if (!this._electronIsAvailable())
-        throw new Error('Невозможно выполнение данной функции');
+        throw new ExceptionError('Невозможно выполнение данной функции');
 
       const data = this._csvParserService.toCsv(this.preparedStats || []);
 
@@ -128,7 +129,7 @@ export class AppComponent {
         }
       );
 
-      if (response instanceof Error) throw new Error(response.message);
+      if (response instanceof Error) throw new ExceptionError(response.message);
 
       this._electronService.ipcRenderer.sendSync('show-message', {
         title: 'Запись CSV файла',
@@ -151,6 +152,12 @@ export class AppComponent {
         type: 'error',
         title: 'Ошибка валидации',
         message: errorMessage,
+      });
+    } else if (error instanceof ExceptionError) {
+      this._electronService.ipcRenderer.sendSync('show-message', {
+        type: 'error',
+        title: 'Ошибка',
+        message: error.message,
       });
     } else if (error instanceof Error) {
       this._electronService.ipcRenderer.sendSync('show-message', {
@@ -194,9 +201,9 @@ export class AppComponent {
     this.stats.stats[idx].products.oil = Number(this.getValue(event));
   };
 
-  private getValue(event: Event): string {
+  private readonly getValue = (event: Event): string => {
     return (event.target as HTMLInputElement).value;
-  }
+  };
 
   protected readonly deleteStatItem = (idx: number) => {
     this.stats.delete(idx);
@@ -234,7 +241,7 @@ export class AppComponent {
           break;
 
         default:
-          throw new Error('Не валидный тип отображения');
+          throw new ExceptionError('Не валидный тип отображения');
       }
     } catch (error) {
       this._catchErrorHandler(error);

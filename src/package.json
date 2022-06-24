@@ -1,6 +1,10 @@
 {
   "name": "donnu-csv-practice",
   "productName": "DonNU CSV Practice",
+  "author": {
+    "name": "Anton Gorban",
+    "email": "antogor.work@gmail.com"
+  },
   "version": "1.0.0",
   "description": "DonNU CSV Practice",
   "main": "electron.prod.js",
