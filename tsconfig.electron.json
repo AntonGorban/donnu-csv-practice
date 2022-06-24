@@ -10,9 +10,9 @@
     "sourceMap": false,
     "declaration": false,
     "downlevelIteration": true,
-    "experimentalDecorators": true,
+    "experimentalDecorators": false,
     "moduleResolution": "node",
-    "importHelpers": true,
+    "importHelpers": false,
     "target": "ES5",
     // "module": "ES2015",
     "lib": ["ES5", "dom"]

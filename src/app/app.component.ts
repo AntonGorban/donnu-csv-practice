@@ -134,7 +134,7 @@ export class AppComponent {
       this._electronService.ipcRenderer.sendSync('show-message', {
         title: 'Запись CSV файла',
         message:
-          'Сохранение информацию сводного характера в CSV файле прошло успешно',
+          'Сохранение информации сводного характера в CSV файл прошло успешно',
       });
     } catch (error) {
       this._catchErrorHandler(error);
