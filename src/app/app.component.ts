@@ -3,12 +3,8 @@ import { ElectronService } from 'ngx-electron';
 import { Component } from '@angular/core';
 
 import { StatList } from '../Classes/Domain/StatList';
-import {
-  getClearData,
-  getClearDataItem,
-  getDefaultData,
-} from '../other/defaultDomain';
 import { CSVParserService } from './csvparser.service';
+import { StatsManagerService } from './StatsManager.service';
 
 @Component({
   selector: 'app-root',
@@ -16,17 +12,19 @@ import { CSVParserService } from './csvparser.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  protected stats: StatList = new StatList(getClearData());
-
-  constructor(
-    private readonly _electronService: ElectronService,
-    private readonly _csvParser: CSVParserService
-  ) {}
-
+  protected stats: StatList;
   protected fileName: null | string = null;
   protected dirName: null | string = null;
   protected pathToFile: null | string = null;
   protected data: null | string = null;
+
+  constructor(
+    private readonly _statsManagerService: StatsManagerService,
+    private readonly _electronService: ElectronService,
+    private readonly _csvParserService: CSVParserService
+  ) {
+    this.stats = new StatList(this._statsManagerService.getClearData());
+  }
 
   private readonly _electronIsAvailable = () => {
     return (
@@ -36,24 +34,28 @@ export class AppComponent {
   };
 
   protected readCsv() {
-    if (!this._electronIsAvailable())
-      throw new Error('Невозможно выполнение данной функции');
+    try {
+      if (!this._electronIsAvailable())
+        throw new Error('Невозможно выполнение данной функции');
 
-    const response =
-      this._electronService.ipcRenderer.sendSync('read-csv-file');
+      const response =
+        this._electronService.ipcRenderer.sendSync('read-csv-file');
 
-    if (response instanceof Error) throw new Error(response.message);
+      if (response instanceof Error) throw new Error(response.message);
 
-    this.fileName = response.fileName;
-    this.dirName = response.dirName;
-    this.pathToFile = response.pathToFile;
-    this.data = response.data;
+      this.fileName = response.fileName;
+      this.dirName = response.dirName;
+      this.pathToFile = response.pathToFile;
+      this.data = response.data;
 
-    console.log(this._csvParser.parseCsv(response.data));
+      console.log(this._csvParserService.parseCsv(response.data));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   protected readonly setDefaultData = () => {
-    this.stats.setStats(getDefaultData());
+    this.stats.setStats(this._statsManagerService.getDefaultData());
   };
 
   protected setRegion = (event: Event, idx: number) => {
@@ -85,6 +87,6 @@ export class AppComponent {
   };
 
   protected createStatItem = () => {
-    this.stats.push(getClearDataItem());
+    this.stats.push(this._statsManagerService.getClearDataItem());
   };
 }
