@@ -89,4 +89,39 @@ export const useIpc = (ipcMain: IpcMain, mainWindow: BrowserWindow) => {
       });
     }
   );
+
+  /* -------------------------------------------------------------------------- */
+  /*                                SAVE CSV FILE                               */
+  /* -------------------------------------------------------------------------- */
+
+  ipcMain.on(
+    'save-csv-file',
+    async (
+      event,
+      args: { title?: string; defaultPath?: string; data: string }
+    ) => {
+      await dialog
+        .showSaveDialog(mainWindow, {
+          title: args.title || 'Сохранение CSV файла',
+          defaultPath: args.defaultPath,
+          filters: [{ name: 'CSV files', extensions: ['csv'] }],
+        })
+        .then((filePath) => filePath.filePath)
+        .then(async (pathToFile) => {
+          if (!pathToFile) {
+            event.returnValue = new Error('Файл не выбран');
+          } else {
+            await fse
+              .ensureDir(path.dirname(pathToFile))
+              .then(async () => {
+                await fse.outputFile(pathToFile, args.data);
+                event.returnValue = true;
+              })
+              .catch(() => {
+                event.returnValue = new Error('Нет такой директории');
+              });
+          }
+        });
+    }
+  );
 };

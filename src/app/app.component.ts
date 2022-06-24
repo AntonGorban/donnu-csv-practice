@@ -107,6 +107,39 @@ export class AppComponent {
     }
   };
 
+  protected readonly savePreparedCsv = () => {
+    try {
+      if (!this._electronIsAvailable())
+        throw new Error('Невозможно выполнение данной функции');
+
+      const data = this._csvParserService.toCsv(this.preparedStats || []);
+
+      const defaultPath =
+        !!this.dirName && !!this.fileName
+          ? `${this.dirName}/${this.viewType}-${this.fileName}`
+          : `${this.viewType}.csv`;
+
+      const response = this._electronService.ipcRenderer.sendSync(
+        'save-csv-file',
+        {
+          title: 'Сохранить информацию сводного характера',
+          defaultPath,
+          data,
+        }
+      );
+
+      if (response instanceof Error) throw new Error(response.message);
+
+      this._electronService.ipcRenderer.sendSync('show-message', {
+        title: 'Запись CSV файла',
+        message:
+          'Сохранение информацию сводного характера в CSV файле прошло успешно',
+      });
+    } catch (error) {
+      this._catchErrorHandler(error);
+    }
+  };
+
   private readonly _catchErrorHandler = (error: unknown) => {
     if (error instanceof ValidationError) {
       const errorMessage = this._validateService.getErrorMessage(

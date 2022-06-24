@@ -144,6 +144,10 @@
           >
         </div>
       </div>
+
+      <button *ngIf="viewType !== 'raw'" (click)="savePreparedCsv()">
+        Сохранить информацию сводного характера
+      </button>
     </div>
   </div>
 </section>
