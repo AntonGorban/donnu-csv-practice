@@ -3,8 +3,13 @@ import { ElectronService } from 'ngx-electron';
 import { Component } from '@angular/core';
 
 import { StatList } from '../Classes/Domain/StatList';
+import { ValidationError } from '../Classes/Error/ValidationError';
+import { Validator } from '../Classes/Validation/Validator';
+import { csvDataVS } from '../other/validation/csvDataVS';
+import { CSVDataType } from '../types/domain';
 import { CSVParserService } from './csvparser.service';
 import { StatsManagerService } from './StatsManager.service';
+import { ValidationService } from './validation.service';
 
 @Component({
   selector: 'app-root',
@@ -17,13 +22,19 @@ export class AppComponent {
   protected dirName: null | string = null;
   protected pathToFile: null | string = null;
   protected data: null | string = null;
+  private readonly _csvValidator: Validator<CSVDataType>;
 
   constructor(
     private readonly _statsManagerService: StatsManagerService,
     private readonly _electronService: ElectronService,
-    private readonly _csvParserService: CSVParserService
+    private readonly _csvParserService: CSVParserService,
+    private readonly _validateService: ValidationService
   ) {
-    this.stats = new StatList(this._statsManagerService.getClearData());
+    this.stats = this._statsManagerService.generateDefaultData();
+    this._csvValidator = this._validateService.generateValidator(
+      csvDataVS,
+      'csv-file'
+    );
   }
 
   private readonly _electronIsAvailable = () => {
@@ -48,11 +59,27 @@ export class AppComponent {
       this.pathToFile = response.pathToFile;
       this.data = response.data;
 
-      console.log(this._csvParserService.parseCsv(response.data));
+      const parsedData = this._csvParserService.parseCsv(response.data);
+
+      const data = this._csvValidator.validate(parsedData);
+      console.log(data);
     } catch (error) {
-      console.error(error);
+      this._catchErrorHandler(error);
     }
   }
+
+  private readonly _catchErrorHandler = (error: unknown) => {
+    if (error instanceof ValidationError) {
+      console.error(
+        'ValidationError',
+        this._validateService.getErrorMessage(error.info)
+      );
+    } else if (error instanceof Error) {
+      console.error('Other Error', error);
+    } else {
+      throw new Error('WTF');
+    }
+  };
 
   protected readonly setDefaultData = () => {
     this.stats.setStats(this._statsManagerService.getDefaultData());

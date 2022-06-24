@@ -2,6 +2,7 @@ import { CSVDataType } from '../../types/domain';
 import { Country } from './Country';
 import { Products } from './Products';
 import { StatItem } from './StatItem';
+import { StatList } from './StatList';
 
 export class StatsManager {
   private readonly _defaultData = defaultData;
@@ -20,6 +21,10 @@ export class StatsManager {
 
   public readonly getDefaultData = () => {
     return this._generateData(this._defaultData);
+  };
+
+  public readonly generateDefaultData = () => {
+    return new StatList(this._generateData(this._defaultData));
   };
 
   public readonly getClearData = () => {
