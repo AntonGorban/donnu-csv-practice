@@ -58,6 +58,24 @@ export class StatsManager {
   public readonly getClearDataItem = () => {
     return this._prepareDataItem(this._clearData[0]);
   };
+
+  public prepareFind = (data: Array<StatItem>): CSVDataType => {
+    return this._prepareCSCData([
+      [...data].sort((a, b) => b.products.steel - a.products.steel)[0],
+    ]);
+  };
+
+  public prepareFilter1 = (data: Array<StatItem>): CSVDataType => {
+    return this._prepareCSCData(
+      [...data].filter((dataItem) => dataItem.products.oil > 1)
+    );
+  };
+
+  public prepareFilter2 = (data: Array<StatItem>): CSVDataType => {
+    return this._prepareCSCData(
+      [...data].filter((dataItem) => dataItem.products.coal < 200)
+    );
+  };
 }
 
 const clearData: CSVDataType = [['', '', 0, 0, 0]];

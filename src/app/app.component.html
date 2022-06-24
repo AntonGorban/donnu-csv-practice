@@ -13,11 +13,11 @@
           <th>Сталь</th>
           <th>Уголь</th>
           <th>Нефть</th>
-          <th>Действия</th>
+          <th *ngIf="viewType === 'raw'">Действия</th>
         </tr>
       </thead>
 
-      <tbody>
+      <tbody *ngIf="viewType === 'raw'">
         <tr *ngFor="let statsItem of stats.stats; let idx = index">
           <td>{{ idx + 1 }}</td>
           <td>
@@ -60,12 +60,29 @@
           </td>
         </tr>
       </tbody>
+
+      <tbody *ngIf="viewType !== 'raw'">
+        <tr *ngFor="let statsItem of preparedStats; let idx = index">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ statsItem[0] }}</td>
+          <td>{{ statsItem[1] }}</td>
+          <td>{{ statsItem[2] }}</td>
+          <td>{{ statsItem[3] }}</td>
+          <td>{{ statsItem[4] }}</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 
   <div id="utils">
     <div id="utils-file">
       <div>
+        <button (click)="setDefaultData()">
+          Сгенерировать исходные данные
+        </button>
+
+        <button (click)="createStatItem()">Добавить</button>
+
         <button (click)="readCsv()">Прочитать из файла</button>
 
         <button (click)="writeCsv()" *ngIf="pathToFile">Записать в файл</button>
@@ -74,9 +91,59 @@
       <em *ngIf="pathToFile">{{ pathToFile }}</em>
     </div>
 
-    <button (click)="setDefaultData()">Generate default stats</button>
+    <div id="utils-view">
+      <div>
+        <div>
+          <input
+            type="radio"
+            name="view"
+            id="view-raw"
+            [checked]="viewType === 'raw'"
+            (click)="changeViewType('raw')"
+          />
+          <label for="view-raw">Исходные данные</label>
+        </div>
 
-    <button (click)="createStatItem()">Добавить</button>
+        <div>
+          <input
+            type="radio"
+            name="view"
+            id="view-find"
+            [checked]="viewType === 'find'"
+            (click)="changeViewType('find')"
+          />
+          <label for="view-find"
+            >Найти страну с наибольшим производством стали.</label
+          >
+        </div>
 
+        <div>
+          <input
+            type="radio"
+            name="view"
+            id="view-filter1"
+            [checked]="viewType === 'filter1'"
+            (click)="changeViewType('filter1')"
+          />
+          <label for="view-filter1"
+            >Найти страны, добыча нефти в которых превысила 1 млн. т.</label
+          >
+        </div>
+
+        <div>
+          <input
+            type="radio"
+            name="view"
+            id="view-filter2"
+            [checked]="viewType === 'filter2'"
+            (click)="changeViewType('filter2')"
+          />
+          <label for="view-filter2"
+            >Выдать информацию о странах, добыча угля в которых не превысила 200
+            млн. т.</label
+          >
+        </div>
+      </div>
+    </div>
   </div>
 </section>

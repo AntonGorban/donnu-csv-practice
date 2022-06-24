@@ -6,7 +6,7 @@ import { StatList } from '../Classes/Domain/StatList';
 import { ValidationError } from '../Classes/Error/ValidationError';
 import { Validator } from '../Classes/Validation/Validator';
 import { csvDataVS } from '../other/validation/csvDataVS';
-import { CSVDataType } from '../types/domain';
+import { CSVDataType, ViewType } from '../types/domain';
 import { CSVParserService } from './csvparser.service';
 import { StatsManagerService } from './StatsManager.service';
 import { ValidationService } from './validation.service';
@@ -18,10 +18,14 @@ import { ValidationService } from './validation.service';
 })
 export class AppComponent {
   protected stats: StatList;
+
+  protected preparedStats: null | CSVDataType = null;
+  protected viewType: ViewType = 'raw';
+
   protected fileName: null | string = null;
   protected dirName: null | string = null;
   protected pathToFile: null | string = null;
-  protected data: null | string = null;
+
   private readonly _csvValidator: Validator<CSVDataType>;
 
   constructor(
@@ -62,7 +66,6 @@ export class AppComponent {
       this.fileName = response.fileName;
       this.dirName = response.dirName;
       this.pathToFile = response.pathToFile;
-      this.data = response.data;
 
       const parsedData = this._csvParserService.parseCsv(response.data);
 
@@ -138,23 +141,23 @@ export class AppComponent {
     this.stats.setStats(this._statsManagerService.getDefaultData());
   };
 
-  protected setRegion = (event: Event, idx: number) => {
+  protected readonly setRegion = (event: Event, idx: number) => {
     this.stats.stats[idx].country.region = this.getValue(event);
   };
 
-  protected setCountry = (event: Event, idx: number) => {
+  protected readonly setCountry = (event: Event, idx: number) => {
     this.stats.stats[idx].country.country = this.getValue(event);
   };
 
-  protected setSteel = (event: Event, idx: number) => {
+  protected readonly setSteel = (event: Event, idx: number) => {
     this.stats.stats[idx].products.steel = Number(this.getValue(event));
   };
 
-  protected setCoal = (event: Event, idx: number) => {
+  protected readonly setCoal = (event: Event, idx: number) => {
     this.stats.stats[idx].products.coal = Number(this.getValue(event));
   };
 
-  protected setOil = (event: Event, idx: number) => {
+  protected readonly setOil = (event: Event, idx: number) => {
     this.stats.stats[idx].products.oil = Number(this.getValue(event));
   };
 
@@ -162,11 +165,46 @@ export class AppComponent {
     return (event.target as HTMLInputElement).value;
   }
 
-  protected deleteStatItem = (idx: number) => {
+  protected readonly deleteStatItem = (idx: number) => {
     this.stats.delete(idx);
   };
 
-  protected createStatItem = () => {
+  protected readonly createStatItem = () => {
     this.stats.push(this._statsManagerService.getClearDataItem());
+  };
+
+  protected readonly changeViewType = (viewType: ViewType) => {
+    try {
+      this.viewType = viewType;
+
+      switch (viewType) {
+        case 'raw':
+          this.preparedStats = null;
+          break;
+
+        case 'find':
+          this.preparedStats = this._statsManagerService.prepareFind(
+            this.stats.stats
+          );
+          break;
+
+        case 'filter1':
+          this.preparedStats = this._statsManagerService.prepareFilter1(
+            this.stats.stats
+          );
+          break;
+
+        case 'filter2':
+          this.preparedStats = this._statsManagerService.prepareFilter2(
+            this.stats.stats
+          );
+          break;
+
+        default:
+          throw new Error('Не валидный тип отображения');
+      }
+    } catch (error) {
+      this._catchErrorHandler(error);
+    }
   };
 }

@@ -5,6 +5,8 @@ section {
   align-items: center;
   justify-content: space-evenly;
   gap: 10px;
+  padding: 10px 5px;
+  box-sizing: border-box;
 }
 
 #title {
@@ -50,6 +52,11 @@ section {
 
 #utils {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-evenly;
+  gap: 15px;
 
   & > div {
     display: flex;
@@ -66,6 +73,20 @@ section {
       width: 100%;
       display: flex;
       align-items: center;
+      justify-content: space-evenly;
+    }
+  }
+
+  & > #utils-view {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+
+    & > div {
+      width: 98%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
       justify-content: space-evenly;
     }
   }
