@@ -2,6 +2,8 @@ import * as papaparse from 'papaparse';
 
 import { Injectable } from '@angular/core';
 
+import { CSVDataType } from '../types/domain';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -16,5 +18,11 @@ export class CSVParserService {
       data.pop();
 
     return data;
+  };
+
+  public toCsv = (csvData: CSVDataType) => {
+    return papaparse.unparse(
+      csvData as unknown as Array<Array<string | number>>
+    );
   };
 }

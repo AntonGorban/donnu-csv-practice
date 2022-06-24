@@ -62,11 +62,32 @@ export class AppComponent {
       const parsedData = this._csvParserService.parseCsv(response.data);
 
       const data = this._csvValidator.validate(parsedData);
-      console.log(data);
+
+      this.stats = this._statsManagerService.generateData(data);
     } catch (error) {
       this._catchErrorHandler(error);
     }
   }
+
+  protected readonly writeCsv = () => {
+    try {
+      if (!this._electronIsAvailable())
+        throw new Error('Невозможно выполнение данной функции');
+
+      const data = this._csvParserService.toCsv(
+        this._statsManagerService.generateCSVData(this.stats.stats)
+      );
+
+      const response = this._electronService.ipcRenderer.sendSync(
+        'write-csv-file',
+        { path: this.dirName, filename: this.fileName, data }
+      );
+
+      if (response instanceof Error) throw new Error(response.message);
+    } catch (error) {
+      this._catchErrorHandler(error);
+    }
+  };
 
   private readonly _catchErrorHandler = (error: unknown) => {
     if (error instanceof ValidationError) {

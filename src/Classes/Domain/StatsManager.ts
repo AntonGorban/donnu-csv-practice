@@ -8,31 +8,55 @@ export class StatsManager {
   private readonly _defaultData = defaultData;
   private readonly _clearData = clearData;
 
-  private readonly _generateDataItem = (dataItem: CSVDataType[0]): StatItem => {
+  private readonly _prepareDataItem = (dataItem: CSVDataType[0]): StatItem => {
     return new StatItem(
       new Country(dataItem[0], dataItem[1]),
       new Products(dataItem[2], dataItem[3], dataItem[4])
     );
   };
 
-  private readonly _generateData = (data: CSVDataType): Array<StatItem> => {
-    return data.map((statItem) => this._generateDataItem(statItem));
+  private readonly _prepareCSVDataItem = (
+    dataItem: StatItem
+  ): CSVDataType[0] => {
+    return [
+      dataItem.country.region,
+      dataItem.country.country,
+      dataItem.products.steel,
+      dataItem.products.coal,
+      dataItem.products.oil,
+    ];
+  };
+
+  private readonly _prepareData = (data: CSVDataType): Array<StatItem> => {
+    return data.map((statItem) => this._prepareDataItem(statItem));
+  };
+
+  private readonly _prepareCSCData = (data: Array<StatItem>): CSVDataType => {
+    return data.map((statItem) => this._prepareCSVDataItem(statItem));
   };
 
   public readonly getDefaultData = () => {
-    return this._generateData(this._defaultData);
+    return this._prepareData(this._defaultData);
+  };
+
+  public readonly generateData = (data: CSVDataType) => {
+    return new StatList(this._prepareData(data));
+  };
+
+  public readonly generateCSVData = (data: Array<StatItem>): CSVDataType => {
+    return this._prepareCSCData(data);
   };
 
   public readonly generateDefaultData = () => {
-    return new StatList(this._generateData(this._defaultData));
+    return new StatList(this._prepareData(this._defaultData));
   };
 
   public readonly getClearData = () => {
-    return this._generateData(this._clearData);
+    return this._prepareData(this._clearData);
   };
 
   public readonly getClearDataItem = () => {
-    return this._generateDataItem(this._clearData[0]);
+    return this._prepareDataItem(this._clearData[0]);
   };
 }
 

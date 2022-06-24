@@ -7,7 +7,7 @@ export const useIpc = (ipcMain: IpcMain, mainWindow: BrowserWindow) => {
   /*                                READ CSV FILE                               */
   /* -------------------------------------------------------------------------- */
 
-  ipcMain.on('read-csv-file', async (event, _arg) => {
+  ipcMain.on('read-csv-file', async (event, _args) => {
     await dialog
       /**
        * @description просим выбрать CSV файл
@@ -52,4 +52,22 @@ export const useIpc = (ipcMain: IpcMain, mainWindow: BrowserWindow) => {
         }
       });
   });
+
+  /* -------------------------------------------------------------------------- */
+  /*                               WRITE CSV FILE                               */
+  /* -------------------------------------------------------------------------- */
+
+  ipcMain.on(
+    'write-csv-file',
+    async (event, args: { path: string; filename: string; data: string }) => {
+      await fse
+        .outputFile(path.join(args.path, args.filename), args.data)
+        .then(() => {
+          event.returnValue = true;
+        })
+        .catch(() => {
+          event.returnValue = new Error('не удалось записать файл');
+        });
+    }
+  );
 };

@@ -68,7 +68,7 @@
       <div>
         <button (click)="readCsv()">Прочитать из файла</button>
 
-        <button *ngIf="pathToFile">Записать в файл</button>
+        <button (click)="writeCsv()" *ngIf="pathToFile">Записать в файл</button>
       </div>
 
       <em *ngIf="pathToFile">{{ pathToFile }}</em>
