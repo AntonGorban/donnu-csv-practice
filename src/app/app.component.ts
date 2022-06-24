@@ -54,6 +54,11 @@ export class AppComponent {
 
       if (response instanceof Error) throw new Error(response.message);
 
+      this._electronService.ipcRenderer.sendSync('show-message', {
+        title: 'Чтение CSV файла',
+        message: 'CSV файл успешно прочитан',
+      });
+
       this.fileName = response.fileName;
       this.dirName = response.dirName;
       this.pathToFile = response.pathToFile;
@@ -62,6 +67,11 @@ export class AppComponent {
       const parsedData = this._csvParserService.parseCsv(response.data);
 
       const data = this._csvValidator.validate(parsedData);
+
+      this._electronService.ipcRenderer.sendSync('show-message', {
+        title: 'Валидация CSV файла',
+        message: 'CSV файл успешно прошел валидацию',
+      });
 
       this.stats = this._statsManagerService.generateData(data);
     } catch (error) {
@@ -84,6 +94,11 @@ export class AppComponent {
       );
 
       if (response instanceof Error) throw new Error(response.message);
+
+      this._electronService.ipcRenderer.sendSync('show-message', {
+        title: 'Запись CSV файла',
+        message: 'CSV файл успешно перезаписан',
+      });
     } catch (error) {
       this._catchErrorHandler(error);
     }
@@ -91,13 +106,30 @@ export class AppComponent {
 
   private readonly _catchErrorHandler = (error: unknown) => {
     if (error instanceof ValidationError) {
-      console.error(
-        'ValidationError',
-        this._validateService.getErrorMessage(error.info)
+      const errorMessage = this._validateService.getErrorMessage(
+        error.info,
+        error.dataVar
       );
+
+      this._electronService.ipcRenderer.sendSync('show-message', {
+        type: 'error',
+        title: 'Ошибка валидации',
+        message: errorMessage,
+      });
     } else if (error instanceof Error) {
-      console.error('Other Error', error);
+      this._electronService.ipcRenderer.sendSync('show-message', {
+        type: 'error',
+        title: 'Ошибка',
+        message: error.message,
+        detail: JSON.stringify(error),
+      });
     } else {
+      this._electronService.ipcRenderer.sendSync('show-message', {
+        type: 'error',
+        title: 'Непредвиденная ошибка',
+        message: 'Что-то пошло не так',
+        detail: JSON.stringify(error),
+      });
       throw new Error('WTF');
     }
   };

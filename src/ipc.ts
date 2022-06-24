@@ -70,4 +70,23 @@ export const useIpc = (ipcMain: IpcMain, mainWindow: BrowserWindow) => {
         });
     }
   );
+
+  /* -------------------------------------------------------------------------- */
+  /*                                SHOW MESSAGE                                */
+  /* -------------------------------------------------------------------------- */
+
+  ipcMain.on(
+    'show-message',
+    async (
+      event,
+      args: { type?: string; title: string; message: string; detail?: string }
+    ) => {
+      event.returnValue = await dialog.showMessageBox(mainWindow, {
+        type: args.type || 'info',
+        title: args.title,
+        message: args.message,
+        detail: args.detail,
+      });
+    }
+  );
 };
