@@ -8,6 +8,7 @@ import {
   getClearDataItem,
   getDefaultData,
 } from '../other/defaultDomain';
+import { CSVParserService } from './csvparser.service';
 
 @Component({
   selector: 'app-root',
@@ -17,47 +18,38 @@ import {
 export class AppComponent {
   protected stats: StatList = new StatList(getClearData());
 
-  constructor(private readonly _electronService: ElectronService) {}
-
-  protected testIPC() {
-    console.log(this._electronService);
-    if (this._electronService.isElectronApp) {
-      const response =
-        this._electronService.ipcRenderer.sendSync('getSomething');
-      console.log(response); // prints 'something'
-    }
-  }
-
-  protected testDir() {
-    if (this._electronService.isElectronApp) {
-      const response =
-        this._electronService.ipcRenderer.sendSync('select-dirs');
-      console.log(response); // prints 'something'
-    }
-  }
+  constructor(
+    private readonly _electronService: ElectronService,
+    private readonly _csvParser: CSVParserService
+  ) {}
 
   protected fileName: null | string = null;
   protected dirName: null | string = null;
   protected pathToFile: null | string = null;
   protected data: null | string = null;
 
-  protected readCsv() {
-    if (
+  private readonly _electronIsAvailable = () => {
+    return (
       !!this?._electronService?.isElectronApp &&
       !!this?._electronService?.ipcRenderer
-    ) {
-      const response =
-        this._electronService.ipcRenderer.sendSync('read-csv-file');
+    );
+  };
 
-      if (response instanceof Error) throw new Error(response.message);
-
-      this.fileName = response.fileName;
-      this.dirName = response.dirName;
-      this.pathToFile = response.pathToFile;
-      this.data = response.data;
-    } else {
+  protected readCsv() {
+    if (!this._electronIsAvailable())
       throw new Error('Невозможно выполнение данной функции');
-    }
+
+    const response =
+      this._electronService.ipcRenderer.sendSync('read-csv-file');
+
+    if (response instanceof Error) throw new Error(response.message);
+
+    this.fileName = response.fileName;
+    this.dirName = response.dirName;
+    this.pathToFile = response.pathToFile;
+    this.data = response.data;
+
+    console.log(this._csvParser.parseCsv(response.data));
   }
 
   protected readonly setDefaultData = () => {

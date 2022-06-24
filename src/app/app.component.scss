@@ -56,4 +56,17 @@ section {
     align-items: center;
     justify-content: space-evenly;
   }
+
+  & > #utils-file {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+
+    & > div {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+    }
+  }
 }
