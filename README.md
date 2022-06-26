@@ -1,27 +1,44 @@
-# DonnuCsvPractice
+# donnu-csv-practice
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.0.2.
+> This projects created for `DonNU`
 
-## Development server
+## Development
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+You mast start command `npm run start`
 
-## Code scaffolding
+Or:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- `npm run watch:electron` - start tsc watching for electron files
+- `npm run start:web` - start `Angular` web server
+- `npm run electron` - start `Electron` wrapper
+
+### Development error
+
+[Namespace 'Electron.CrossProcessExports' has no exported member 'Remote'](https://github.com/ThorstenHans/ngx-electron/issues/71)
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+You must start command:
 
-## Running unit tests
+- `npm run package:win` - start building package for `Windows` OS
+- `npm run package:linux` - start building package for `Linux` OS
+- `npm run package:linux:x64` - start building package for `linux` OS with arch `x64`
+- `npm run package:linux:armv7l` - start building package for `linux` OS with arch `armv7l`
+- `npm run package:linux:arm64` - start building package for `linux` OS with arch `arm64`
+- `npm run package:osx` - start building package for `macOS`
+- `npm run package:all` - start building package for all OS's
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Release
 
-## Running end-to-end tests
+[Current Release](https://github.com/AntonGorban/donnu-csv-practice/releases/latest)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Packages:
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- `Windows`:
+  - [x64](https://github.com/AntonGorban/donnu-csv-practice/releases/download/1.0.0/donnu-csv-practice-1.0.0-win32-x64.zip)
+  - [arm64](https://github.com/AntonGorban/donnu-csv-practice/releases/download/1.0.0/donnu-csv-practice-1.0.0-win32-arm64.zip)
+  - [ia32](https://github.com/AntonGorban/donnu-csv-practice/releases/download/1.0.0/donnu-csv-practice-1.0.0-win32-ia32.zip)
+- `Linux`:
+  - [x64](https://github.com/AntonGorban/donnu-csv-practice/releases/download/1.0.0/donnu-csv-practice-1.0.0-linux-x64.tar.gz)
+  - [arm64](https://github.com/AntonGorban/donnu-csv-practice/releases/download/1.0.0/donnu-csv-practice-1.0.0-linux-arm64.tar.gz)
+  - [armv7l](https://github.com/AntonGorban/donnu-csv-practice/releases/download/1.0.0/donnu-csv-practice-1.0.0-linux-armv7l.tar.gz)

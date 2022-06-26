@@ -1,6 +1,6 @@
 {
   "name": "donnu-csv-practice",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": {
     "name": "Anton Gorban",
     "email": "antogor.work@gmail.com"
@@ -9,12 +9,15 @@
     "electron": "electron ./src/electron.dev",
     "ng": "ng",
     "start:web": "ng serve",
-    "start": "concurrently \"npm run start:web\" \"npm run electron\"",
+    "start": "concurrently \"npm run watch:electron\" \"npm run start:web\" \"npm run electron\"",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "watch:electron": "tsc --watch --project tsconfig.electron.json",
     "package:win": "tsc --project tsconfig.electron.json && npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=win32 --arch=all --overwrite ",
     "package:linux": "tsc --project tsconfig.electron.json && npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=linux --arch=all --overwrite ",
+    "package:linux:x64": "tsc --project tsconfig.electron.json && npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=linux --arch=x64 --overwrite ",
+    "package:linux:armv7l": "tsc --project tsconfig.electron.json && npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=linux --arch=armv7l --overwrite ",
+    "package:linux:arm64": "tsc --project tsconfig.electron.json && npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=linux --arch=arm64 --overwrite ",
     "package:osx": "tsc --project tsconfig.electron.json && npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --platform=darwin --arch=all --overwrite ",
     "package:all": "tsc --project tsconfig.electron.json && npm run build && cross-var electron-packager dist/$npm_package_name $npm_package_name-$npm_package_version --out=packages --all --arch=all --overwrite "
   },
